@@ -18,12 +18,12 @@ class bst
   int remove(int data);
   int insert(int data);
   int display();
-  void removeAll();
+  int removeAll();
  private:
   node* root;
   int insert(node* &root, int data);
   int display(node* root);
-  void removeAll(node* &root);
+  int removeAll(node* &root);
   int remove(node* &root, int data);
 };
 

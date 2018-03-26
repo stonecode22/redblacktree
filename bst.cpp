@@ -50,19 +50,19 @@ int bst::display(node* root)
     }
   else
     {
-      display(root->left);
-      cout << root->data;
-      display(root->right);
+      display(root->left); //recursively repeats going to left node until at VERY leftmost node
+      cout << root->data << " "; //display data (if NULL, displays nothing)
+      display(root->right); //go to the right of node
       return 1;
     }
 }
 
-void bst::removeAll()
+int bst::removeAll()
 {
-  removeAll(root);
+  return removeAll(root);
 }
 
-void bst::removeAll(node* &root)
+int bst::removeAll(node* &root)
 {
   if(root != NULL)
     {
