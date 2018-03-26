@@ -1,59 +1,146 @@
-//Binary Search Tree, Stone Yang P6
+#include"bst.h"
 #include<iostream>
-#include<fstream>
-#include<string.h>
-using namespace std;
 
-int main()
+bst::bst()
 {
-  //1. Read in numbers through .txt or through terminal
-  int choice;
-  cout << "Binary Search Tree\n Type '1' to use a .txt file, '2' to insert in terminal, '0' to exit.\n";
-  cin >> choice;
-  
-  //text file
-  //if(choice == '1')
+  root = NULL;
+}
+
+bst::~bst()
+{
+  removeAll();
+}
+
+int bst::insert(int data)
+{
+  return insert(root, data);
+}
+
+int bst::insert(node* &root, int data)
+{
+  if(root == NULL)
     {
-      int line[200]; //when inputted, copy into separate array, so if option 1 or 2 is taken, the following functions/steps use one main array
-      ifstream file ("text.txt"); //reads from .txt
-      if(file.is_open())
-	{
-	  while (getline(file, line))
-	    {
-	      cout << line << endl;
-	    }
-	  file.close();
-	}
-      else
-	cout << "File not found.\n";
+      node* newNode = new node;
+      newNode->data = data;
+      newNode->left = NULL;
+      newNode->right = NULL;
+      root = newNode;
+      return 1;
+    }
+  else if((root->data) > data)
+    {
+      return insert(root->left, data);
+    }
+  else
+    {
+      return insert(root->right, data);
     }
 }
-  /*  if(choice == '2')
-    {
-      int array[200];
-      for(int i = 0; i < 200; i++) //spaces will separate values
-	{
-	  
-      
 
-  //2. Create list of values given in step 1
-
-  //3. Take values and order them
-  
-  //3a. If "n" is total amount of values, use the n/2th term (middle value)
-  
-  //3b. Using n/2th term, sort them by looking for a lesser value and "cutting" the sort group until it gets the lowest number
-
-  //4. Repeat this recursively until list is ordered from lowest to highest
-
-  //5. Use ordered list to form binary tree structure
-
-  //6. ADD function - Add a number to the list, and repeat the process of sorting (3-5)
-
-  //7. REMOVE function - Remove node that contains a certain value, reorder with the process (3-5)
-
-  //8. PRINT function - Printing the tree by printing parent values (n/2) and starting new lines for children (2n+1, 2n+2)
-  
+int bst::display()
+{
+  return display(root);
 }
 
-  
+int bst::display(node* root)
+{
+  if(root == NULL)
+    {
+      return 0;
+    }
+  else
+    {
+      display(root->left);
+      cout << root->data;
+      display(root->right);
+      return 1;
+    }
+}
+
+void bst::removeAll()
+{
+  removeAll(root);
+}
+
+void bst::removeAll(node* &root)
+{
+  if(root != NULL)
+    {
+      removeAll(root->left);
+      removeAll(root->right);
+      delete root;
+      root = NULL;
+      return 1;
+    }
+}
+
+    
+int bst::remove(int data)
+{
+  return remove(root, data);
+}
+
+int bst::remove(node* &root, int data)
+{
+  if(root == NULL) //if bst is empty
+    {
+      return 0;
+    }
+  else if(root != NULL) //if bst is not empty
+    {
+      if(root->data == data) //when matching
+	{
+	  if(root->left == NULL && root->right == NULL) //if there are no children
+	    {
+	      delete root;
+	      root = NULL;
+	      return 1;
+	    }
+	  else if(root->left != NULL && root->right == NULL) //if there is only a left child
+	    {
+	      node *temp = root->left;
+	      delete root;
+	      root = temp;
+	      return 1;
+	    }
+	  else if(root->left == NULL && root->right != NULL) //if there is only a right child
+	    {
+	      node *temp = root->right;
+	      delete root;
+	      root = temp;
+	      return 1;
+	    }
+	  else if(root->left != NULL && root->right != NULL && (root->right->left) == NULL) //if there are two children, and the right child has no left child (right child becomes the new root)
+	    {
+	      node *temp = root->right;
+	      root->data = temp->data;
+	      temp = temp->right;
+	      delete temp;
+	      return 1;
+	    }	  
+	  else //if there are two children
+	    {
+	      node *temp = root->right; //current
+	      node *last; //parent of the current
+	      while(temp->left != NULL)
+		{
+		  last = temp;
+		  temp = temp->left;
+		}
+	      root->data = temp->data;
+	      delete temp;
+	      last->left = NULL;
+	      return 1;
+	    }
+	      
+	}
+      else if(root->data > data)
+	{
+	  remove(root->left, data);
+	}
+      else
+	{
+	  remove(root->right, data);
+	}
+    }
+}
