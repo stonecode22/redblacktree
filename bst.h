@@ -13,14 +13,14 @@ struct node
 class bst
 {
  public:
-  bst();
-  ~bst();
-  int remove(int data);
-  int insert(int data);
-  int display();
-  int removeAll();
-  int findHeight();
-  int level();
+  bst(); //constructor
+  ~bst(); //destructor
+  int remove(int data); //remove int from tree
+  int insert(int data); //add int to tree & reconstruct
+  int display(); //display tree
+  int removeAll(); //for deconstructor, delete all nodes
+  int findHeight(); //calculate height of bst
+  int level(); //use in conjunction with findHeight to display the levels within the tree (visual rep)
  private:
   node* root;
   int height;

@@ -2,16 +2,13 @@
 //Creates a sorted binary tree that allows the user to add, remove, and display
 #include<iostream>
 #include<string.h>
-#include<vector>
 #include<fstream>
 #include"bst.h"
 using namespace std;
 
 bool getConsoleData(int* numbers, bool* valid, bst* tree);
 bool getFileData(int* numbers, bool* valid, bst* tree);
-//void insert(bst* tree);
-//void remove(bst* 
-
+ 
 int main()
 {
   bst tree; //creating tree (constructor sets root = NULL)
@@ -19,7 +16,7 @@ int main()
   char readChoice2[10]; //choice for Phase 2
   bool valid = true; //to allow the user to retry after failure
   bool repeat = true; //to allow phase 2 to repeat
-  int numbers[100]; //where data values are stored
+  int numbers[200]; //where data values are stored
   
   cout << "Binary Search Tree\n";
   //Phase 1:
@@ -80,28 +77,28 @@ int main()
 	{
 	  cout << "Add a number into the tree: ";
 	  cin >> number;
-	  tree.insert(number);
+	  tree.insert(number); //inserts into the tree
 	}
       
       else if(strcmp(readChoice2, "REMOVE") == 0)
 	{
 	  cout << "Remove a number from the tree: ";
 	  cin >> number;
-	  tree.remove(number);
+	  tree.remove(number); //removes from the tree, arranges the tree to adapt (change structure) to the change
 	}
       else if(strcmp(readChoice2, "DISPLAY") == 0)
 	{
 	  cout << endl;
-	  tree.display();
-	  tree.level();
+	  tree.display(); //displays numbers inorder
+	  tree.level(); //displays visual tree levels
 	}
       else if(strcmp(readChoice2, "QUIT") == 0)
 	{
-	  repeat = false;
+	  repeat = false; //stop loop, end program
 	}
       else
 	{
-	  cout << "Invalid command, try again.\n";
+	  cout << "Invalid command, try again.\n"; //when you misspell one of those 4 words
 	}
     }
   return 0;
@@ -116,14 +113,14 @@ bool getConsoleData(int* numbers, bool* valid, bst* tree)
   cout << "Enter values separated by spaces (end by using '-1'): ";
   int valueCount = 0;
   bool terminate = false; //end the input session with '-1'
-  while(valueCount < 100 && terminate == false) //for 100 numbers, insert index values into numbers array
+  while(valueCount < 200 && terminate == false) //for 100 numbers, insert index values into numbers array
     {
       cin >> numbers[valueCount];
-      tree->insert(numbers[valueCount]); //insert value into the tree
+      tree->insert(numbers[valueCount]); //insert value from numbers array into the tree
       if(numbers[valueCount] == -1)
 	{
 	  terminate = true;
-	  tree->remove(-1);
+	  tree->remove(-1); //tree->insert(-1) happened, so have to remove it (probably not the best way to do things)
 	}
       valueCount++;
     }
@@ -159,7 +156,7 @@ bool getFileData(int* numbers, bool* valid, bst* tree)
 	}
       while(!file.eof() && file) //while the file has not "hit" the end line
 	{
-	  tree->insert(value);
+	  tree->insert(value); //read ints from the file and insert into the tree
 	  file >> value; 
 	  file.ignore();
 	}
