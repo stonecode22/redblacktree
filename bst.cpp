@@ -114,7 +114,7 @@ int bst::remove(node* &root, int data)
 	    {
 	      node *temp = root->right;
 	      root->data = temp->data;
-	      temp = temp->right;
+	      root->right = temp->right;
 	      delete temp;
 	      return 1;
 	    }	  
