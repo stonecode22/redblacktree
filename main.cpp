@@ -137,7 +137,7 @@ bool getFileData(int* numbers, bool* valid, bst* tree)
 
   //prompt user to insert the name of the file to be used
   cout << "Enter the name of file to use: ";
-  cin.getline(fileName, 49);
+  cin.getline(fileName, 50);
   file.open(fileName);
   
   //if file is not open (does not exist)
