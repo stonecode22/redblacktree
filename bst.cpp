@@ -127,6 +127,7 @@ int bst::remove(node* &root, int data)
 		  last = temp;
 		  temp = temp->left;
 		}
+	      delete root;
 	      root->data = temp->data;
 	      delete temp;
 	      last->left = NULL;
@@ -141,6 +142,70 @@ int bst::remove(node* &root, int data)
       else
 	{
 	  remove(root->right, data);
+	}
+    }
+}
+
+int bst::findHeight()
+{
+  return findHeight(root);
+}
+
+int bst::findHeight(node* root)
+{
+  if(root == NULL)
+    {
+      return 0;
+    }
+  if(root !=NULL)
+    {
+      int leftHeight = 0;
+      leftHeight = findHeight(root->left); //keeps moving to a lower level
+      
+      int rightHeight = 0;
+      rightHeight = findHeight(root->right);
+
+      
+      if(leftHeight > rightHeight)
+	{
+	  return leftHeight + 1;
+	}
+      else
+	{
+	  return rightHeight + 1;
+	}
+    }
+}
+      
+int bst::level()
+{
+  int height = findHeight();
+  cout << "\nLevel#:";
+  for(int i = 0; i < height; i++)
+    {
+      cout << endl << "     " << (i+1) << ": ";
+      level(root, i);
+    }
+  cout << endl;
+  return 1;
+}
+
+int bst::level(node* root, int order)
+{
+  if(root == NULL)
+    {
+      return 0;
+    }
+  if(root != NULL)
+    {
+      if(order == 0)
+	{
+	  cout << root->data << " ";
+	}
+      else
+	{
+	  level(root->left, order-1);
+	  level(root->right, order-1);
 	}
     }
 }

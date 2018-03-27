@@ -1,4 +1,5 @@
-//Binary Search Tree
+//Binary Search Tree, By Stone Yang, 3/26
+//Creates a sorted binary tree that allows the user to add, remove, and display
 #include<iostream>
 #include<string.h>
 #include<vector>
@@ -8,14 +9,17 @@ using namespace std;
 
 bool getConsoleData(int* numbers, bool* valid, bst* tree);
 bool getFileData(int* numbers, bool* valid, bst* tree);
+//void insert(bst* tree);
+//void remove(bst* 
 
 int main()
 {
-  bst tree;
-  char readChoice1[10];
-  char readChoice2[10];
-  bool valid = true;
-  int numbers[100];
+  bst tree; //creating tree (constructor sets root = NULL)
+  char readChoice1[10]; //choice for Phase 1
+  char readChoice2[10]; //choice for Phase 2
+  bool valid = true; //to allow the user to retry after failure
+  bool repeat = true; //to allow phase 2 to repeat
+  int numbers[100]; //where data values are stored
   
   cout << "Binary Search Tree\n";
   //Phase 1:
@@ -56,14 +60,50 @@ int main()
   //Purpose: display the tree created in Phase 1
   cout << "Tree successfully generated!\n Your binary search tree:\n";
   tree.display();
+  tree.level();
 
   //Phase 3:
   //Purpose: prompt user to make additional edits (removing nodes, inserting nodes, re-displaying the tree)
-  valid = true; //reusing valid for another loop
-  cout << "INSERT a node, REMOVE a node, DISPLAY the tree, or QUIT.\n";
-
-  
-  
+  while(repeat == true)
+    {
+      int number = 0;
+      cout << "INSERT a node, REMOVE a node, DISPLAY the tree, or QUIT.\n";
+      cin >> readChoice2;
+      
+      //ignore case-sensitivity of readCase2
+      for(int i = 0; i < strlen(readChoice2); i++)
+	{
+	  readChoice2[i] = toupper(readChoice2[i]);
+	}
+      
+      if(strcmp(readChoice2, "INSERT") == 0)
+	{
+	  cout << "Add a number into the tree: ";
+	  cin >> number;
+	  tree.insert(number);
+	}
+      
+      else if(strcmp(readChoice2, "REMOVE") == 0)
+	{
+	  cout << "Remove a number from the tree: ";
+	  cin >> number;
+	  tree.remove(number);
+	}
+      else if(strcmp(readChoice2, "DISPLAY") == 0)
+	{
+	  cout << endl;
+	  tree.display();
+	  tree.level();
+	}
+      else if(strcmp(readChoice2, "QUIT") == 0)
+	{
+	  repeat = false;
+	}
+      else
+	{
+	  cout << "Invalid command, try again.\n";
+	}
+    }
   return 0;
 }
 
@@ -95,14 +135,14 @@ bool getConsoleData(int* numbers, bool* valid, bst* tree)
 bool getFileData(int* numbers, bool* valid, bst* tree)
 {
   char fileName[50];
-  int valueCount = 0;
+  int value;
   ifstream file;
 
   //prompt user to insert the name of the file to be used
   cout << "Enter the name of file to use: ";
   cin.getline(fileName, 49);
   file.open(fileName);
-
+  
   //if file is not open (does not exist)
   if(!file.is_open())
     {
@@ -112,12 +152,17 @@ bool getFileData(int* numbers, bool* valid, bst* tree)
     }
   else
     {
-      while(!file.eof()) //while the file has not "hit" the end line
+      if(file)
 	{
-	  file >> numbers[valueCount];
-	  tree->insert(numbers[valueCount]);
+	  file >> value;
+	  file.ignore();
 	}
-      tree->remove(numbers[valueCount]); //error without this, where the last value is taken in twice
+      while(!file.eof() && file) //while the file has not "hit" the end line
+	{
+	  tree->insert(value);
+	  file >> value; 
+	  file.ignore();
+	}
       file.close();
       *valid = true;
       return valid; //return "true" to valid, continue to phase 2
