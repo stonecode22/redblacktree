@@ -65,7 +65,7 @@ int main()
     {
       int number = 0;
       cout << "INSERT a node, REMOVE a node, DISPLAY the tree, or QUIT.\n";
-      cin >> readChoice2;
+      cin.getline(readChoice2, 10);
       
       //ignore case-sensitivity of readCase2
       for(int i = 0; i < strlen(readChoice2); i++)
