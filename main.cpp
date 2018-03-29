@@ -77,6 +77,7 @@ int main()
 	{
 	  cout << "Add a number into the tree: ";
 	  cin >> number;
+	  cin.ignore();
 	  tree.insert(number); //inserts into the tree
 	}
       
@@ -84,6 +85,7 @@ int main()
 	{
 	  cout << "Remove a number from the tree: ";
 	  cin >> number;
+	  cin.ignore();
 	  tree.remove(number); //removes from the tree, arranges the tree to adapt (change structure) to the change
 	}
       else if(strcmp(readChoice2, "DISPLAY") == 0)
