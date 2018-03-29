@@ -18,7 +18,7 @@ int bst::insert(int data)
 //create a node that passes a data value and a way to link with two other nodes
 int bst::insert(node* &root, int data)
 {
-  if(root == NULL) //if no tree
+  if(root == NULL) //if no node
     {
       node* newNode = new node; //create a new node
       newNode->data = data; //data user will insert will be set into node
