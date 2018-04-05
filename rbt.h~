@@ -1,11 +1,12 @@
-#ifndef BST_H
-#define BST_H
+#ifndef RBT_H
+#define RBT_H
 #include<iostream>
 using namespace std;
 
 struct node
 {
   int data;
+  int color;
   node* left;
   node* right;
 };

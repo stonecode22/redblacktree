@@ -1,9 +1,9 @@
-//Binary Search Tree, By Stone Yang, 3/26
+//Red Black Tree Tree, By Stone Yang, 3/26
 //Creates a sorted binary tree that allows the user to add, remove, and display
 #include<iostream>
 #include<string.h>
 #include<fstream>
-#include"bst.h"
+#include"rbt.h"
 using namespace std;
 
 bool getConsoleData(int* numbers, bool* valid, bst* tree);
@@ -138,7 +138,7 @@ bool getFileData(int* numbers, bool* valid, bst* tree)
   ifstream file;
 
   //prompt user to insert the name of the file to be used
-  cout << "Enter the name of file to use: ";
+  cout << "Enter the name of file to use (be sure values are separated by ','): ";
   cin.getline(fileName, 50);
   file.open(fileName);
   

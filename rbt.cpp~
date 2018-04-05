@@ -1,4 +1,4 @@
-#include"bst.h"
+#include"rbt.h"
 
 bst::bst()
 {
@@ -12,16 +12,21 @@ bst::~bst()
 
 int bst::insert(int data)
 {
-  return insert(root, data); //accesses insert(node*, int)
+  return insert(root, data, parent); //accesses insert(node*, int)
 }
 
 //create a node that passes a data value and a way to link with two other nodes
-int bst::insert(node* &root, int data)
+int bst::insert(node* &root, int data, node* &parent)
 {
   if(root == NULL) //if no node
     {
       node* newNode = new node; //create a new node
       newNode->data = data; //data user will insert will be set into node
+      if(root->parent != NULL)
+	{
+	  newNode->parent = root; //sets parent of the node to the previous value?
+	}
+      newNode->color = 0; // sets to black; 0 is black, 1 is red
       newNode->left = NULL; //by default, set to NULL
       newNode->right = NULL; //by default, set to NULL
       root = newNode; //make this the root
@@ -51,7 +56,16 @@ int bst::display(node* root)
   else //otherwise...
     {
       display(root->left); //recursively repeat, going to left node until at VERY leftmost node
-      cout << root->data << " "; //display data (if NULL, displays nothing)
+      cout << root->data << " | ";//display data (if NULL, displays nothing)
+      if(root->color == 0)
+	{
+	  cout << "Black | ";
+	}
+      else
+	{
+	  cout << "Red | ";
+	}
+      cout << root->parent << endl;
       display(root->right); //go to the right of node
       return 1;
     }
