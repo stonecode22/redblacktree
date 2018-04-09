@@ -1,22 +1,22 @@
 #include"rbt.h"
 
-bst::bst()
+rbt::rbt()
 {
   root = NULL; //constructor setting our bst.tree (in main) to NULL
 }
 
-bst::~bst()
+rbt::~rbt()
 {
   removeAll(); //deconstructor deletes all nodes one by on
 }
 
-int bst::insert(int data)
+int rbt::insert(int data)
 {
   return insert(root, data, parent); //accesses insert(node*, int, node*)
 }
 
 //create a node that passes a data value and a way to link with two other nodes
-int bst::insert(node* &root, int data, node* &prev)
+int rbt::insert(node* &root, int data, node* &prev)
 {
   if(root == NULL) //if no node
     {
@@ -55,12 +55,12 @@ int bst::insert(node* &root, int data, node* &prev)
     }
 }
 
-int bst::display()
+int rbt::display()
 {
   return display(root); //accesses display(node*)
 }
 
-int bst::display(node* root)
+int rbt::display(node* root)
 {
   if(root == NULL) //if no root, don't do anything
     {
@@ -92,12 +92,12 @@ int bst::display(node* root)
     }
 }
 
-int bst::removeAll()
+int rbt::removeAll()
 {
   return removeAll(root); //accesses removeAll(node*)
 }
 
-int bst::removeAll(node* &root)
+int rbt::removeAll(node* &root)
 {
   if(root != NULL) //if tree exists
     {
@@ -109,13 +109,12 @@ int bst::removeAll(node* &root)
     }
 }
 
-    
-int bst::remove(int data)
+int rbt::remove(int data)
 {
   return remove(root, data); //accesses remove(node*, int)
 }
 
-int bst::remove(node* &root, int data)
+int rbt::remove(node* &root, int data)
 {
   if(root == NULL) //if bst is empty
     {
@@ -181,12 +180,12 @@ int bst::remove(node* &root, int data)
     }
 }
 
-int bst::findHeight()
+int rbt::findHeight()
 {
   return findHeight(root); //accesses findHeight(node*)
 }
 
-int bst::findHeight(node* root)
+int rbt::findHeight(node* root)
 {
   if(root == NULL) //if root = NULL, do nothing
     {
@@ -212,7 +211,7 @@ int bst::findHeight(node* root)
     }
 }
       
-int bst::level()
+int rbt::level()
 {
   int height = findHeight(); //using findHeight(), sets height = the height of the tree
   cout << "\nLevel#:";
@@ -225,7 +224,7 @@ int bst::level()
   return 1;
 }
 
-int bst::level(node* root, int order)
+int rbt::level(node* root, int order)
 {
   if(root == NULL) //if root = NULL, do nothing
     {

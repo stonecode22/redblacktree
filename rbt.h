@@ -12,11 +12,11 @@ struct node
   node* parent;
 };
 
-class bst
+class rbt
 {
  public:
-  bst(); //constructor
-  ~bst(); //destructor
+  rbt(); //constructor
+  ~rbt(); //destructor
   int remove(int data); //remove int from tree
   int insert(int data); //add int to tree & reconstruct
   int display(); //display tree
@@ -26,7 +26,7 @@ class bst
  private:
   node* root;
   int height;
-  int insert(node* &root, int data);
+  int insert(node* &root, int data, node* &parent);
   int display(node* root);
   int removeAll(node* &root);
   int remove(node* &root, int data);

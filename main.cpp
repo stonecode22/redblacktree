@@ -6,19 +6,19 @@
 #include"rbt.h"
 using namespace std;
 
-bool getConsoleData(int* numbers, bool* valid, bst* tree);
-bool getFileData(int* numbers, bool* valid, bst* tree);
+bool getConsoleData(int* numbers, bool* valid, rbt* tree);
+bool getFileData(int* numbers, bool* valid, rbt* tree);
  
 int main()
 {
-  bst tree; //creating tree (constructor sets root = NULL)
+  rbt tree; //creating tree (constructor sets root = NULL)
   char readChoice1[10]; //choice for Phase 1
   char readChoice2[10]; //choice for Phase 2
   bool valid = true; //to allow the user to retry after failure
   bool repeat = true; //to allow phase 2 to repeat
   int numbers[200]; //where data values are stored
   
-  cout << "Binary Search Tree\n";
+  cout << "Red-Black Tree\n";
   //Phase 1:
   //Purpose: Store in data in two methods (file/console) and insert data values into the tree
   do
@@ -64,7 +64,7 @@ int main()
   while(repeat == true)
     {
       int number = 0;
-      cout << "INSERT a node, REMOVE a node, DISPLAY the tree, or QUIT.\n";
+      cout << "INSERT a node, DISPLAY the tree, or QUIT.\n";
       cin.getline(readChoice2, 10);
       
       //ignore case-sensitivity of readCase2
@@ -81,13 +81,13 @@ int main()
 	  tree.insert(number); //inserts into the tree
 	}
       
-      else if(strcmp(readChoice2, "REMOVE") == 0)
+      /*  else if(strcmp(readChoice2, "REMOVE") == 0)
 	{
 	  cout << "Remove a number from the tree: ";
 	  cin >> number;
 	  cin.ignore();
 	  tree.remove(number); //removes from the tree, arranges the tree to adapt (change structure) to the change
-	}
+	  } */
       else if(strcmp(readChoice2, "DISPLAY") == 0)
 	{
 	  cout << endl;
@@ -109,7 +109,7 @@ int main()
 //functions below
 
 //Phase 1: function to get values in the console
-bool getConsoleData(int* numbers, bool* valid, bst* tree)
+bool getConsoleData(int* numbers, bool* valid, rbt* tree)
 {
   //prompt user to enter values
   cout << "Enter values separated by spaces (end by using '-1'): ";
@@ -131,7 +131,7 @@ bool getConsoleData(int* numbers, bool* valid, bst* tree)
 }
 
 //Phase 1: function to get values from a file
-bool getFileData(int* numbers, bool* valid, bst* tree)
+bool getFileData(int* numbers, bool* valid, rbt* tree)
 {
   char fileName[50];
   int value;
