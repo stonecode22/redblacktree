@@ -5,8 +5,8 @@ using namespace std;
 
 struct node
 {
-  int data;
-  int color;
+  int data; //contained number
+  int color; //0 = Black, 1 = Red
   node* left;
   node* right;
   node* parent;
@@ -26,7 +26,8 @@ class rbt
  private:
   node* root;
   int height;
-  int insert(node* &root, int data, node* &parent);
+  int insert(node* &root, int data);
+  int repair(node* &root);
   int display(node* root);
   int removeAll(node* &root);
   int remove(node* &root, int data);

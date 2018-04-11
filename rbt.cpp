@@ -2,7 +2,7 @@
 
 rbt::rbt()
 {
-  root = NULL; //constructor setting our bst.tree (in main) to NULL
+  root = NULL; //constructor setting our rbt.tree (in main) to NULL
 }
 
 rbt::~rbt()
@@ -12,47 +12,57 @@ rbt::~rbt()
 
 int rbt::insert(int data)
 {
-  return insert(root, data, parent); //accesses insert(node*, int, node*)
+  return insert(root, data); //accesses insert(node*, int, node*)
 }
 
 //create a node that passes a data value and a way to link with two other nodes
-int rbt::insert(node* &root, int data, node* &prev)
+int rbt::insert(node* &root, int data)
 {
   if(root == NULL) //if no node
     {
       node* newNode = new node; //create a new node
       newNode->data = data; //data user will insert will be set into node
-      if(prev != NULL) //if the parent exists
+      newNode->left = NULL;
+      newNode->right = NULL;
+      newNode->parent = NULL;
+      if(root != NULL)
 	{
-	  newNode->parent = prev; //sets parent of the node to the previous value?
+	  root->parent = newNode;
 	}
-      else //if parent doesn't exist (at the top)
-	{
-	  newNode->parent = NULL;
-	}
-      //ADD: 3 node exception & length of black must be equal on LEFT and RIGHT sides
-      if(newNode->parent == NULL || newNode->parent->color == 1) //if parent doesn't exist or it does but its color is red
-	{
-	  newNode->color = 0; // sets to black (0 is black)
-	}
-      else //if the parent exists, and its color is black
-	{
-	  newNode->color = 1; // sets to red (1 is red)
-	}
-      
-      newNode->left = NULL; //by default, set to NULL
-      newNode->right = NULL; //by default, set to NULL
-      root = newNode; //make this the root
+      newNode->color = 1;
+      root = newNode;
+      repair(root);
       return 1;
     }
   else if((root->data) > data) //root already exists, so CASE 2: the data in root is larger than the data we input; insert this into the left child of root 
     {
-      return insert(root->left, data, root);
+      return insert(root->left, data);
     }
   else //root already exists, CASE 3: root is smaller than the data inputted; insert this into right child of root
     {
-      return insert(root->right, data, root);
+      return insert(root->right, data);
     }
+}
+
+int repair(node* &root)
+{
+  //1. Node is the root, has no parent
+  if(root->parent == NULL)
+    {
+      root->parent->color = 0;
+      return 1;
+    }
+  else if(root->parent == BLACK)
+    {
+      return 1;
+    }
+  else if(
+
+  //2. Node's parent is black
+
+  //3. Node's parent & uncle is red
+
+  //4. Node's parent is red, uncle is black
 }
 
 int rbt::display()
