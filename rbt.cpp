@@ -10,47 +10,47 @@ rbt::~rbt()
   removeAll(); //deconstructor deletes all nodes one by on
 }
 
-node rbt::parentOf(node* relative)
+node* rbt::parentOf(node* relative)
 {
   return relative->parent;
 }
 
 node* rbt::gParentOf(node* relative)
 {
-  node* parent = parentOf(relative);
-  if(parent == NULL)
+  node* p = parentOf(relative);
+  if(p == NULL)
     {
       return NULL;
     }
-  return parentOf(parent);
+  return parentOf(p);
 }
 
 node* rbt::sibling(node* relative)
 {
-  node* parent = parentOf(relative);
-  if(parent == NULL)
+  node* p = parentOf(relative);
+  if(p == NULL)
     {
       return NULL;
     }
-  if(relative == parent->left)
+  if(relative == p->left)
     {
-      return parent->right;
+      return p->right;
     }
   else
     {
-      return parent->left;
+      return p->left;
     }
 }
 
 node* rbt::uncle(node* relative)
 {
-  node* parent = parentOf(relative);
-  node* gParent = gParentOf(gParent);
-  if(gParent == NULL)
+  node* p = parentOf(relative);
+  node* g = gParentOf(relative);
+  if(g == NULL)
     {
       return NULL;
     }
-  return siblingOf(parent);
+  return siblingOf(p);
 }
 
 int rotateL(node* root)
@@ -134,29 +134,29 @@ int repair(node* &root)
   //4. Node's parent is red, and uncle is black
   else
     {
-      node* parent = parentOf(root);
-      node* gParent = gParentOf(root);
-      if(root == gParent->left->right)
+      node* p = parentOf(root);
+      node* g = gParentOf(root);
+      if(root == g->left->right)
 	{
 	  rotateL(root);
 	  root = root->left;
 	}
-      else if(root == gParent->right->left)
+      else if(root == g->right->left)
 	{
 	  rotateR(root);
 	  root = root->right;
 	}
       //4.5. 
-      if(root == parent->left)
+      if(root == p->left)
 	{
-	  rotateR(gParent);
+	  rotateR(g);
 	  return 1;
 	}
       else
 	{
-	  rotateL(gParent);
-	  parent->color = 0;
-	  gParent->color = 1;
+	  rotateL(g);
+	  p->color = 0;
+	  g->color = 1;
 	  return 1;
 	}
     }
