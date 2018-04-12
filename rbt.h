@@ -1,6 +1,7 @@
 #ifndef RBT_H
 #define RBT_H
 #include<iostream>
+#include<assert.h>
 using namespace std;
 
 struct node
@@ -30,10 +31,6 @@ class rbt
  private:
   int height;
   node* root;
-  //  node* parentOf(node* relative);
-  //  node* gParentOf(node* relative);
-  //  node* siblingOf(node* relative);
-  //  node* uncleOf(node* relative);
   int rotateL(node* root);
   int rotateR(node* root);
   int insert(node* &root, int data);

@@ -6,52 +6,22 @@
 #include"rbt.h"
 using namespace std;
 
-bool getConsoleData(int* numbers, bool* valid, rbt* tree);
 bool getFileData(int* numbers, bool* valid, rbt* tree);
  
 int main()
 {
   rbt tree; //creating tree (constructor sets root = NULL)
-  char readChoice1[10]; //choice for Phase 1
-  char readChoice2[10]; //choice for Phase 2
+  char readChoice[10]; //choice
   bool valid = true; //to allow the user to retry after failure
   bool repeat = true; //to allow phase 2 to repeat
   int numbers[200]; //where data values are stored
-  
-  cout << "Red-Black Tree\n";
-  //Phase 1:
-  //Purpose: Store in data in two methods (file/console) and insert data values into the tree
+
   do
     {
-      //prompt user for an inital choice between two insertion methods
-      cout << "'FILE' to insert data from file, 'CONSOLE' to insert data from console.\n";
-      cin.getline(readChoice1, 10);
-
-      //make readChoice1 uppercase to ignore case-sensitivity
-      for(int i = 0; i < strlen(readChoice1); i++)
-	{
-	  readChoice1[i] = toupper(readChoice1[i]);
-	}
-
-      //if user inputs file (file insertion)
-      if(strcmp(readChoice1, "FILE") == 0)
-	{
-	  getFileData(numbers, &valid, &tree);
-	}
-
-      //if users inputs console (console insertion)
-      else if(strcmp(readChoice1, "CONSOLE") == 0)
-	{
-	  getConsoleData(numbers, &valid, &tree);
-	}
-
-      //if user doesn't input any of the above
-      else
-	{
-	  cout << "Invalid command, try again.\n";
-	  valid = false;
-	}
-    }while(valid == false); //any situation where valid = false, loop back and prompt user to retry
+      cout << "Red-Black Tree\n";
+      cout << "Choose a file of ints to insert.\n";
+      getFileData(numbers, &valid, &tree);
+    }while(valid == false);
 
   //Phase 2:
   //Purpose: display the tree created in Phase 1
@@ -65,15 +35,15 @@ int main()
     {
       int number = 0;
       cout << "INSERT a node, DISPLAY the tree, or QUIT.\n";
-      cin.getline(readChoice2, 10);
+      cin.getline(readChoice, 10);
       
-      //ignore case-sensitivity of readCase2
-      for(int i = 0; i < strlen(readChoice2); i++)
+      //ignore case-sensitivity of readChoice
+      for(int i = 0; i < strlen(readChoice); i++)
 	{
-	  readChoice2[i] = toupper(readChoice2[i]);
+	  readChoice[i] = toupper(readChoice[i]);
 	}
       
-      if(strcmp(readChoice2, "INSERT") == 0)
+      if(strcmp(readChoice, "INSERT") == 0)
 	{
 	  cout << "Add a number into the tree: ";
 	  cin >> number;
@@ -88,13 +58,14 @@ int main()
 	  cin.ignore();
 	  tree.remove(number); //removes from the tree, arranges the tree to adapt (change structure) to the change
 	  } */
-      else if(strcmp(readChoice2, "DISPLAY") == 0)
+      
+      else if(strcmp(readChoice, "DISPLAY") == 0)
 	{
 	  cout << endl;
 	  tree.display(); //displays numbers inorder
 	  tree.level(); //displays visual tree levels
 	}
-      else if(strcmp(readChoice2, "QUIT") == 0)
+      else if(strcmp(readChoice, "QUIT") == 0)
 	{
 	  repeat = false; //stop loop, end program
 	}
@@ -106,31 +77,7 @@ int main()
   return 0;
 }
 
-//functions below
-
-//Phase 1: function to get values in the console
-bool getConsoleData(int* numbers, bool* valid, rbt* tree)
-{
-  //prompt user to enter values
-  cout << "Enter values separated by spaces (end by using '-1'): ";
-  int valueCount = 0;
-  bool terminate = false; //end the input session with '-1'
-  while(valueCount < 200 && terminate == false) //for 100 numbers, insert index values into numbers array
-    {
-      cin >> numbers[valueCount];
-      tree->insert(numbers[valueCount]); //insert value from numbers array into the tree
-      if(numbers[valueCount] == -1)
-	{
-	  terminate = true;
-	  tree->remove(-1); //tree->insert(-1) happened, so have to remove it (probably not the best way to do things)
-	}
-      valueCount++;
-    }
-  *valid = true;
-  return valid; //returns "true" to valid, onto phase 2
-}
-
-//Phase 1: function to get values from a file
+//function to get values from a file
 bool getFileData(int* numbers, bool* valid, rbt* tree)
 {
   char fileName[50];

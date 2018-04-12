@@ -22,10 +22,10 @@ node* rbt::gParentOf(node* relative)
     {
       return NULL;
     }
-  return parentOf(p);
+    return parentOf(p);
 }
 
-node* rbt::sibling(node* relative)
+node* rbt::siblingOf(node* relative)
 {
   node* p = parentOf(relative);
   if(p == NULL)
@@ -42,7 +42,7 @@ node* rbt::sibling(node* relative)
     }
 }
 
-node* rbt::uncle(node* relative)
+node* rbt::uncleOf(node* relative)
 {
   node* p = parentOf(relative);
   node* g = gParentOf(relative);
@@ -53,7 +53,7 @@ node* rbt::uncle(node* relative)
   return siblingOf(p);
 }
 
-int rotateL(node* root)
+int rbt::rotateL(node* root)
 {
   node* newRoot = root->right;
   assert(newRoot != NULL);
@@ -64,7 +64,7 @@ int rotateL(node* root)
   return 1;
 }
 
-int rotateR(node* root)
+int rbt::rotateR(node* root)
 {
   node* newRoot = root->left;
   assert(newRoot != NULL);
@@ -90,9 +90,9 @@ int rbt::insert(node* &root, int data)
       newNode->left = NULL;
       newNode->right = NULL;
       newNode->parent = NULL;
-      if(root != NULL)
+      if(newNode != NULL)
 	{
-	  root->parent = newNode;
+	  newNode->parent = root;
 	}
       newNode->color = 1;
       root = newNode;
@@ -109,7 +109,7 @@ int rbt::insert(node* &root, int data)
     }
 }
 
-int repair(node* &root)
+int rbt::repair(node* &root)
 {
   //1. Node is the root, has no parent
   if(parentOf(root) == NULL)
@@ -125,10 +125,10 @@ int repair(node* &root)
   //3. Node's parent & uncle is red
   else if(parentOf(root)->color == 1)
     {
-      parent(root)->color = 0;
-      uncle(root)->color = 0;
-      gParent(root)->color = 1;
-      repair(gParent(root));
+      parentOf(root)->color = 0;
+      uncleOf(root)->color = 0;
+      gParentOf(root)->color = 1;
+      repair(root->parent->parent);
       return 1;
     }
   //4. Node's parent is red, and uncle is black
