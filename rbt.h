@@ -23,9 +23,19 @@ class rbt
   int removeAll(); //for deconstructor, delete all nodes
   int findHeight(); //calculate height of bst
   int level(); //use in conjunction with findHeight to display the levels within the tree (visual rep)
+  node* parentOf(node* relative);
+  node* gParentOf(node* relative);
+  node* siblingOf(node* relative);
+  node* uncleOf(node* relative);
  private:
-  node* root;
   int height;
+  node* root;
+  //  node* parentOf(node* relative);
+  //  node* gParentOf(node* relative);
+  //  node* siblingOf(node* relative);
+  //  node* uncleOf(node* relative);
+  int rotateL(node* root);
+  int rotateR(node* root);
   int insert(node* &root, int data);
   int repair(node* &root);
   int display(node* root);

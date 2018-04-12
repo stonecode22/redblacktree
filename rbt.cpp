@@ -10,6 +10,71 @@ rbt::~rbt()
   removeAll(); //deconstructor deletes all nodes one by on
 }
 
+node rbt::parentOf(node* relative)
+{
+  return relative->parent;
+}
+
+node* rbt::gParentOf(node* relative)
+{
+  node* parent = parentOf(relative);
+  if(parent == NULL)
+    {
+      return NULL;
+    }
+  return parentOf(parent);
+}
+
+node* rbt::sibling(node* relative)
+{
+  node* parent = parentOf(relative);
+  if(parent == NULL)
+    {
+      return NULL;
+    }
+  if(relative == parent->left)
+    {
+      return parent->right;
+    }
+  else
+    {
+      return parent->left;
+    }
+}
+
+node* rbt::uncle(node* relative)
+{
+  node* parent = parentOf(relative);
+  node* gParent = gParentOf(gParent);
+  if(gParent == NULL)
+    {
+      return NULL;
+    }
+  return siblingOf(parent);
+}
+
+int rotateL(node* root)
+{
+  node* newRoot = root->right;
+  assert(newRoot != NULL);
+  root->right = newRoot->left;
+  newRoot->left = root;
+  newRoot->parent = root->parent;
+  root->parent = newRoot;
+  return 1;
+}
+
+int rotateR(node* root)
+{
+  node* newRoot = root->left;
+  assert(newRoot != NULL);
+  root->right = newRoot->right;
+  newRoot->right = root;
+  newRoot->parent = root->parent;
+  root->parent = newRoot;
+  return 1;
+}
+
 int rbt::insert(int data)
 {
   return insert(root, data); //accesses insert(node*, int, node*)
@@ -47,22 +112,54 @@ int rbt::insert(node* &root, int data)
 int repair(node* &root)
 {
   //1. Node is the root, has no parent
-  if(root->parent == NULL)
+  if(parentOf(root) == NULL)
     {
-      root->parent->color = 0;
+      root->color = 0;
       return 1;
     }
-  else if(root->parent == BLACK)
-    {
-      return 1;
-    }
-  else if(
-
   //2. Node's parent is black
-
+  else if(parentOf(root)->color == 0)
+    {
+      return 1;
+    }
   //3. Node's parent & uncle is red
-
-  //4. Node's parent is red, uncle is black
+  else if(parentOf(root)->color == 1)
+    {
+      parent(root)->color = 0;
+      uncle(root)->color = 0;
+      gParent(root)->color = 1;
+      repair(gParent(root));
+      return 1;
+    }
+  //4. Node's parent is red, and uncle is black
+  else
+    {
+      node* parent = parentOf(root);
+      node* gParent = gParentOf(root);
+      if(root == gParent->left->right)
+	{
+	  rotateL(root);
+	  root = root->left;
+	}
+      else if(root == gParent->right->left)
+	{
+	  rotateR(root);
+	  root = root->right;
+	}
+      //4.5. 
+      if(root == parent->left)
+	{
+	  rotateR(gParent);
+	  return 1;
+	}
+      else
+	{
+	  rotateL(gParent);
+	  parent->color = 0;
+	  gParent->color = 1;
+	  return 1;
+	}
+    }
 }
 
 int rbt::display()
