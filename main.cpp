@@ -7,7 +7,7 @@
 using namespace std;
 
 bool getFileData(int* numbers, bool* valid, rbt* tree);
- 
+
 int main()
 {
   rbt tree; //creating tree (constructor sets root = NULL)
@@ -15,12 +15,21 @@ int main()
   bool valid = true; //to allow the user to retry after failure
   bool repeat = true; //to allow phase 2 to repeat
   int numbers[200]; //where data values are stored
-
+  //Phase 1:
+  //Purpose: prompt user to choose a file, extract data & create the first tree
   do
     {
       cout << "Red-Black Tree\n";
       cout << "Choose a file of ints to insert.\n";
-      getFileData(numbers, &valid, &tree);
+      int value;
+      for(int i = 0; i < 7; i++)
+	{
+	  cout << "#: ";
+	  cin >> value;
+	  cin.ignore();
+	  tree.insert(value);
+	}
+      //      getFileData(numbers, &valid, &tree);
     }while(valid == false);
 
   //Phase 2:
@@ -83,7 +92,7 @@ bool getFileData(int* numbers, bool* valid, rbt* tree)
   char fileName[50];
   int value;
   ifstream file;
-
+  
   //prompt user to insert the name of the file to be used
   cout << "Enter the name of file to use (be sure values are separated by ','): ";
   cin.getline(fileName, 50);

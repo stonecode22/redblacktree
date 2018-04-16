@@ -31,10 +31,10 @@ class rbt
  private:
   int height;
   node* root;
-  int rotateL(node* root);
-  int rotateR(node* root);
-  int insert(node* &root, int data);
-  int repair(node* &root);
+  int rotateL(node* &root, node* &p);
+  int rotateR(node* &root, node* &p);
+  int insert(node* &root, node* &temp);
+  int repair(node* &root, node* &temp);
   int display(node* root);
   int removeAll(node* &root);
   int remove(node* &root, int data);
