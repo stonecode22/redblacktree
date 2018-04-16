@@ -10,39 +10,42 @@ rbt::~rbt()
   removeAll(); //deconstructor deletes all nodes one by on
 }
 
+//Left rotator function
 int rbt::rotateL(node* &root, node* &p)
 {
   node* child = p->right;
   
   p->right = child->left; //child's left child becomes p's right child
-  if(p->right != NULL)
+  if(p->right != NULL) //if parent's right child exists
     {
-      p->right->parent = p; //right child becomes p's parent
+      p->right->parent = p; //parent's right child becomes p's parent
     }
-  if(child != NULL) //to not lose grandparent
+  if(child != NULL) //if child exists
     {
-      child->parent = p->parent; //child becomes parents grandparent
+      child->parent = p->parent; //child becomes old p's grandparent
     }
-  if(p->parent == NULL)
+  if(p->parent == NULL) //if p has no parent
     {
-      root = child;
+      root = child; //rotate so that child is the new root
     }
-  else if(p == p->parent->left)
+  else if(p == p->parent->left) //if p = is the left child of its grandfather
     {
-      p->parent->left = child;
+      p->parent->left = child; //let p become new child
     }
-  else
+  else //if p = the right child of its grandfather
     {
-      p->parent->right = child;
+      p->parent->right = child; //let p become new child
     }
-  child->left = p;
-  p->parent = child;
+  child->left = p; //p becomes new left child of the old child
+  p->parent = child; //new p's parent is old child
   return 1;
 }
 
-int rbt::rotateR(node* &root, node* &p)
+//Right rotator function
+int rbt::rotateR(node* &root, node* &p) //similar to rotateL
 {
   node* child = p->left;
+  
   p->left = child->right;
   if(p->left != NULL)
     {
@@ -71,33 +74,35 @@ int rbt::rotateR(node* &root, node* &p)
 
 int rbt::insert(int data)
 {
+  //create a new node here
   node* newNode = new node;
   newNode->data = data;
   newNode->left = NULL;
   newNode->right = NULL;
   newNode->parent = NULL;
-  newNode->color = 1;
-  insert(root, newNode); //accesses insert(node*, int, node*)
-  repair(root, newNode);
+  newNode->color = 1; //default color to RED [1]
+  insert(root, newNode); //accesses insert(node*, node*)
+  repair(root, newNode); //fix the newly created tree
 }
 
 //create a node that passes a data value and a way to link with two other nodes
 int rbt::insert(node* &root, node* &temp)
 {
-  if(root == NULL)
+  if(root == NULL) //if node doesn't exist
     {
-      root = temp;
+      root = temp; //from insert(int data), make the root = newNode (temp here)
       return 1;
     }
-  else if(root->data > temp->data)
+  //similar to a binary search tree
+  else if(root->data > temp->data) //if the data in current node is smaller than what we're inserting
     {
-      temp->parent = root;
-      return insert(root->left, temp);
+      temp->parent = root; //set the parent
+      return insert(root->left, temp); //recursively check again until NULL
     }
   else
     {
-      temp->parent = root;
-      return insert(root->right, temp);
+      temp->parent = root; //set parent
+      return insert(root->right, temp); //recursion
     }      
 }
 
@@ -105,11 +110,16 @@ int rbt::repair(node* &root, node* &temp)
 {
   node* p = NULL;
   node* gp = NULL;
+  //in the conditions that...
+  //1. There is not only one node in the tree
+  //2. The color of temp (newNode) is red
+  //3. The color of temp's parent is also red
+  //   We deem it necessary to go through this loop and fix the tree
   while((temp != root) && (temp->color == 1) && (temp->parent->color == 1))
     {
       p = temp->parent; //parent
       gp = temp->parent->parent; //grandparent
-      if(gp->left == p) //parent is left child
+      if(p == gp->left) //parent is left child of its grandparent
 	{
 	  node* unc = gp->right; //gp->right is uncle
 	  if(unc != NULL && unc->color == 1) //if uncle exists & it's red
@@ -119,26 +129,27 @@ int rbt::repair(node* &root, node* &temp)
 	      unc->color = 0; //uncle must be red within the reqs. of the while loop
 	      temp = gp; //need to set temp = gp
 	    }
-	  else if(unc->color = 0)
+	  else //if uncle is NULL & black
 	    {
-	      if(temp == p->right)
+	      if(temp == p->right) //if temp = p's right child
 		{
-		  rotateL(root, p);
+		  rotateL(root, p); //call rotateL function
 		  temp = p;
 		  p = temp->parent;
 		}
-	      rotateR(root, gp);
-	      
-	      int tempColor; //swap colors
+	      rotateR(root, gp); //call rotateR function
+
+	      //swap colors
+	      int tempColor;
 	      tempColor = p->color;
 	      p->color = gp->color;
 	      gp->color = tempColor;
 	      temp = p;
 	    }
 	}
-      else //parent is right child
+      else //parent is right child of its grandparent
 	{
-	  node* unc = gp->left; //gp->right is uncle
+	  node* unc = gp->left; //gp->left is uncle
 	  if(unc != NULL && unc->color == 1) //if uncle exists & it's red
 	    {
 	      p->color = 0; //parent is orig. red
@@ -146,17 +157,18 @@ int rbt::repair(node* &root, node* &temp)
 	      unc->color = 0; //uncle must be red within the reqs. of the while loop
 	      temp = gp; //need to set temp = gp
 	    }
-	  else if(unc->color = 0)
+	  else
 	    {
-	      if(temp == p->left)
+	      if(temp == p->left) //if temp = p's left child
 		{
-		  rotateR(root, p);
+		  rotateR(root, p); //call rotateR
 		  temp = p;
 		  p = temp->parent;
 		}
-	      rotateL(root, gp);
-	      
-	      int tempColor; //swap colors
+	      rotateL(root, gp); //call RotateL
+
+	      //swap colors
+	      int tempColor;
 	      tempColor = p->color;
 	      p->color = gp->color;
 	      gp->color = tempColor;
@@ -164,7 +176,7 @@ int rbt::repair(node* &root, node* &temp)
 	    }
 	}
     }
-  root->color = 0;
+  root->color = 0; //ALWAYS set the root to be black
 }
 
 int rbt::display()
@@ -182,22 +194,38 @@ int rbt::display(node* root)
     {
       display(root->left); //recursively repeat, going to left node until at VERY leftmost node
       cout << root->data << " | ";//display data (if NULL, displays nothing)
-      if(root->color == 0)
+      if(root->color == 0) //if node is black
 	{
-	  cout << "Black | ";
+	  cout << "BLK | ";
 	}
-      else
+      else //if it's red
 	{
-	  cout << "Red | ";
+	  cout << "RED | ";
 	}
 
-      if(root->parent != NULL)
+      if(root->parent != NULL) //if parent exists
 	{
-	  cout << "Parent: " << root->parent->data << endl;
+	  cout << "Parent: " << root->parent->data << " | "; //print the parent's data
 	}
-      else
+      else //if parent doesn't exist
 	{
-	  cout << "NULL\n";
+	  cout << "Parent: NULL | "; //print NULL
+	}
+      if(root->left != NULL) //if node's left child exists
+	{
+	  cout << "LChild: " << root->left->data << " | "; //print its left child's data
+	}
+      else //if not, NULL
+	{
+	  cout << "LChild: NULL | ";
+	}
+      if(root->right != NULL) //if node's right child exists
+	{
+	  cout << "RChild: " << root->right->data << endl; //print its right child's data
+	}
+      else //if not, NULL
+	{
+	  cout << "RChild: NULL\n";
 	}
       display(root->right); //go to the right of node
       return 1;
@@ -218,77 +246,6 @@ int rbt::removeAll(node* &root)
       delete root; //with the two removeAll() above, only the root remains; we delete it here
       root = NULL;
       return 1;
-    }
-}
-
-int rbt::remove(int data)
-{
-  return remove(root, data); //accesses remove(node*, int)
-}
-
-int rbt::remove(node* &root, int data)
-{
-  if(root == NULL) //if bst is empty
-    {
-      return 0;
-    }
-  else if(root != NULL) //if bst is not empty
-    {
-      if(root->data == data) //when user finds a match in data values
-	{
-	  if(root->left == NULL && root->right == NULL) //if there are no children
-	    {
-	      delete root; //delete root
-	      root = NULL;
-	      return 1;
-	    }
-	  else if(root->left != NULL && root->right == NULL) //if there is only a left child
-	    {
-	      node *temp = root->left;
-	      delete root;
-	      root = temp; //replace the parent with the left child
-	      return 1;
-	    }
-	  else if(root->left == NULL && root->right != NULL) //if there is only a right child
-	    {
-	      node *temp = root->right;
-	      delete root;
-	      root = temp; //replace the parent with the right child
-	      return 1;
-	    }
-	  else if(root->left != NULL && root->right != NULL && (root->right->left) == NULL) //if there are two children, and the right child has no left child (right child becomes the new root)
-	    {
-	      node *temp = root->right;
-	      root->data = temp->data; //root's data becomes the data in temp
-	      root->right = temp->right; //root->right then points to the data after deleting the temp
-	      delete temp;
-	      return 1;
-	    }	  
-	  else //if there are two children
-	    {
-	      node *temp = root->right; //current
-	      node *last; //parent of the current
-	      while(temp->left != NULL)
-		{
-		  last = temp;
-		  temp = temp->left;
-		}
-	      delete root;
-	      root->data = temp->data;
-	      delete temp;
-	      last->left = NULL;
-	      return 1;
-	    }
-	      
-	}
-      else if(root->data > data) //if data found in the root is greater than the one user inputted, recursively go to the left child until match
-	{
-	  remove(root->left, data);
-	}
-      else //if data found in the root is less than the one user inuputted, recursively go to the right child until match
-	{
-	  remove(root->right, data);
-	}
     }
 }
 
@@ -355,3 +312,5 @@ int rbt::level(node* root, int order)
 	}
     }
 }
+
+//removal function here in pt2

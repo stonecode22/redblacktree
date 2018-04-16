@@ -14,27 +14,20 @@ int main()
   char readChoice[10]; //choice
   bool valid = true; //to allow the user to retry after failure
   bool repeat = true; //to allow phase 2 to repeat
-  int numbers[200]; //where data values are stored
+  int numbers[200];
+  
   //Phase 1:
   //Purpose: prompt user to choose a file, extract data & create the first tree
   do
     {
       cout << "Red-Black Tree\n";
       cout << "Choose a file of ints to insert.\n";
-      int value;
-      for(int i = 0; i < 7; i++)
-	{
-	  cout << "#: ";
-	  cin >> value;
-	  cin.ignore();
-	  tree.insert(value);
-	}
-      //      getFileData(numbers, &valid, &tree);
+      getFileData(numbers, &valid, &tree);
     }while(valid == false);
 
   //Phase 2:
   //Purpose: display the tree created in Phase 1
-  cout << "Tree successfully generated!\n Your binary search tree:\n";
+  cout << "Tree successfully generated!\n Your Red-Black Tree:\n";
   tree.display();
   tree.level();
 
