@@ -2,7 +2,7 @@
 
 rbt::rbt()
 {
-  root = NULL;
+  root = NULL; //constructor
 }
 
 rbt::~rbt()
@@ -157,7 +157,7 @@ int rbt::repair(node* &root, node* &temp)
 	      unc->color = 0; //uncle must be red within the reqs. of the while loop
 	      temp = gp; //need to set temp = gp
 	    }
-	  else
+	  else //if unc is NULL (leaf), which is black
 	    {
 	      if(temp == p->left) //if temp = p's left child
 		{

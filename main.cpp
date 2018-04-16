@@ -1,12 +1,12 @@
 //Red Black Tree Tree, By Stone Yang, 3/26
-//Creates a sorted binary tree that allows the user to add, remove, and display
+//Creates a sorted & colored binary tree that allows the user to add and display
 #include<iostream>
 #include<string.h>
 #include<fstream>
 #include"rbt.h"
 using namespace std;
 
-bool getFileData(int* numbers, bool* valid, rbt* tree);
+bool getFileData(bool* valid, rbt* tree);
 
 int main()
 {
@@ -14,25 +14,24 @@ int main()
   char readChoice[10]; //choice
   bool valid = true; //to allow the user to retry after failure
   bool repeat = true; //to allow phase 2 to repeat
-  int numbers[200];
   
   //Phase 1:
   //Purpose: prompt user to choose a file, extract data & create the first tree
-  do
+  do //Do this loop once, and repeat if an invalid file is given
     {
       cout << "Red-Black Tree\n";
       cout << "Choose a file of ints to insert.\n";
-      getFileData(numbers, &valid, &tree);
+      getFileData(&valid, &tree);
     }while(valid == false);
 
   //Phase 2:
   //Purpose: display the tree created in Phase 1
   cout << "Tree successfully generated!\n Your Red-Black Tree:\n";
-  tree.display();
-  tree.level();
+  tree.display(); //Display tree information after file insert
+  tree.level(); //Visual represntation
 
   //Phase 3:
-  //Purpose: prompt user to make additional edits (removing nodes, inserting nodes, re-displaying the tree)
+  //Purpose: prompt user to make additional edits (inserting nodes, re-displaying the tree)
   while(repeat == true)
     {
       int number = 0;
@@ -51,16 +50,7 @@ int main()
 	  cin >> number;
 	  cin.ignore();
 	  tree.insert(number); //inserts into the tree
-	}
-      
-      /*  else if(strcmp(readChoice2, "REMOVE") == 0)
-	{
-	  cout << "Remove a number from the tree: ";
-	  cin >> number;
-	  cin.ignore();
-	  tree.remove(number); //removes from the tree, arranges the tree to adapt (change structure) to the change
-	  } */
-      
+	}      
       else if(strcmp(readChoice, "DISPLAY") == 0)
 	{
 	  cout << endl;
@@ -73,14 +63,14 @@ int main()
 	}
       else
 	{
-	  cout << "Invalid command, try again.\n"; //when you misspell one of those 4 words
+	  cout << "Invalid command, try again.\n"; //when you misspell one of those 3 words
 	}
     }
   return 0;
 }
 
 //function to get values from a file
-bool getFileData(int* numbers, bool* valid, rbt* tree)
+bool getFileData(bool* valid, rbt* tree)
 {
   char fileName[50];
   int value;
@@ -98,21 +88,21 @@ bool getFileData(int* numbers, bool* valid, rbt* tree)
       *valid = false;
       return valid; //return "false" to valid, and loop in the main until "true"
     }
-  else
+  else //reads the ints of the file provided
     {
       if(file)
 	{
-	  file >> value;
+	  file >> value; //reads first value
 	  file.ignore();
 	}
       while(!file.eof() && file) //while the file has not "hit" the end line
 	{
 	  tree->insert(value); //read ints from the file and insert into the tree
-	  file >> value; 
+	  file >> value;
 	  file.ignore();
 	}
-      file.close();
-      *valid = true;
-      return valid; //return "true" to valid, continue to phase 2
+    file.close();
+    *valid = true;
+    return valid; //return "true" to valid, continue to phase 2
     }
 }
